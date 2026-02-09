@@ -64,12 +64,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        $bookData = new BookResource($book);
         $book->delete();
 
-        return response()->json([
-            'message' => 'Book deleted successfully',
-            'book' => $bookData
-        ], 200);
+        return response()->noContent();
     }
 }
