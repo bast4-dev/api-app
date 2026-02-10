@@ -19,6 +19,20 @@ class BookResource extends JsonResource
             'author' => strtoupper($this->author),
             'summary' => $this->summary,
             'isbn' => $this->isbn,
+            '_links' => [
+                'self' => [
+                    'href' => route('books.show', $this->id),
+                ],
+                'update' => [
+                    'href' => route('books.update', $this->id),
+                ],
+                'delete' => [
+                    'href' => route('books.destroy', $this->id),
+                ],
+                'all' => [
+                    'href' => route('books.index'),
+                ],
+            ],
         ];
     }
 }
