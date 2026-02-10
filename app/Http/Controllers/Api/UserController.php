@@ -24,7 +24,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Inscription ok',
+            'message' => 'Connexion réussie.',
             'user' => $user,
         ], 201);
     }
@@ -40,7 +40,7 @@ class UserController extends Controller
 
         if (!$user || !Hash::check($validated['password'], $user->password)) {
             return response()->json([
-                'message' => 'aie aie'
+                'message' => 'Identifiants incorrects.'
             ], 401);
         }
 
@@ -58,7 +58,7 @@ class UserController extends Controller
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
-            'message' => 'Deconnexion ok'
+            'message' => 'Deconnexion réussie.'
         ], 200);
     }
 }
