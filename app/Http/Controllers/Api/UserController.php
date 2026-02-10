@@ -24,7 +24,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Connexion réussie.',
+            'message' => 'Inscription réussie.',
             'user' => $user,
         ], 201);
     }
@@ -47,7 +47,7 @@ class UserController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'message' => 'Connexion ok',
+            'message' => 'Connexion réussie.',
             'user' => $user,
             'token' => $token,
         ], 200);
