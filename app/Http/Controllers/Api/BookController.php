@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\BookResource;
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BookController extends Controller
 {
@@ -14,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return BookResource::collection(Book::all());
+        return BookResource::collection(Book::paginate(2));
     }
 
     /**
@@ -22,16 +23,16 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-            $validated = $request->validate([
-                'title' => 'required|string|min:3|max:255',
-                'author' => 'required|string|min:3|max:100',
-                'summary' => 'required|string|min:10|max:500',
-                'isbn' => 'required|string|size:13|unique:books,isbn',
-            ]);
+        $validated = $request->validate([
+            'title' => 'required|string|min:3|max:255',
+            'author' => 'required|string|min:3|max:100',
+            'summary' => 'required|string|min:10|max:500',
+            'isbn' => 'required|string|size:13|unique:books,isbn',
+        ]);
 
-            $book = Book::create($validated);
+        $book = Book::create($validated);
 
-            return new BookResource($book);
+        return new BookResource($book);
     }
 
     /**
@@ -39,7 +40,12 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        return new BookResource($book);
+        // Cache pendant 60 minutes
+        $cachedBook = Cache::remember("book.{$book->id}", 3600, function () use ($book) {
+            return $book;
+        });
+
+        return new BookResource($cachedBook);
     }
 
     /**
