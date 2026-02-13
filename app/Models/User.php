@@ -6,12 +6,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; 
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasApiTokens;
+
+    public function usesProfessionalEmail(): bool
+    {
+        return !preg_match('/@(gmail|yahoo|hotmail|live|outlook)\./', $this->email);
+    }
 
     /**
      * The attributes that are mass assignable.
